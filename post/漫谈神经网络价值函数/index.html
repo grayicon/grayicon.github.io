@@ -7,18 +7,18 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
   <meta name="author" content="Orianna">
-  <meta name="description" content="keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里">
+  <meta name="description" content="本文不会包含任何数学公式，内容将引起舒适。 说到神经网络的价值函数，或者是损失函数，也可以叫目标函数，随意啦，就不得不提反向传播，提到反向传播，就不得不提链式求导，梯度下降，提到梯度下降，那我就不得不抛出了上面的图片。 简单描述一下这个寻优过程，初始化一个随机值，沿着梯度的反方向以一定的步子（不要太大）不停的迭代，就能寻找到一个比较不错的局部最小值，是不是很简单？你要问我什么是梯度下降，以及梯度下降与">
   
-  <meta property="og:title" content="Keras构建复杂模型的可行性" />
-<meta property="og:description" content="keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里" />
+  <meta property="og:title" content="漫谈神经网络价值函数" />
+<meta property="og:description" content="本文不会包含任何数学公式，内容将引起舒适。 说到神经网络的价值函数，或者是损失函数，也可以叫目标函数，随意啦，就不得不提反向传播，提到反向传播，就不得不提链式求导，梯度下降，提到梯度下降，那我就不得不抛出了上面的图片。 简单描述一下这个寻优过程，初始化一个随机值，沿着梯度的反方向以一定的步子（不要太大）不停的迭代，就能寻找到一个比较不错的局部最小值，是不是很简单？你要问我什么是梯度下降，以及梯度下降与" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://grayicon.github.io/post/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/" />
+<meta property="og:url" content="https://grayicon.github.io/post/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/" />
 
 
 
-<meta property="article:published_time" content="2019-08-16T18:18:02&#43;08:00"/>
+<meta property="article:published_time" content="2019-08-16T18:31:57&#43;08:00"/>
 
-<meta property="article:modified_time" content="2019-08-16T18:18:02&#43;08:00"/>
+<meta property="article:modified_time" content="2019-08-16T18:31:57&#43;08:00"/>
 
 
 
@@ -33,11 +33,11 @@
 
   <title>
   
-       Keras构建复杂模型的可行性 | Orianna 
+       漫谈神经网络价值函数 | Orianna 
   
   </title>
 
-  <link rel="canonical" href="https://grayicon.github.io/post/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/">
+  <link rel="canonical" href="https://grayicon.github.io/post/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/">
 
   
   
@@ -302,7 +302,7 @@
     
   </ul>
 
-  <div class="px-4 post-heading">Keras构建复杂模型的可行性</div>
+  <div class="px-4 post-heading">漫谈神经网络价值函数</div>
 
   <ul class="post-meta li-x mt-1">
     
@@ -311,7 +311,7 @@
 
     
       <li class="middot"></li>
-      <li>5 minutes read</li>
+      <li>4 minutes read</li>
     
   </ul>
   
@@ -320,106 +320,42 @@
 
 
           <div class="post-content markdown">
-            <p><img src="https://upload-images.jianshu.io/upload_images/12348021-db9030cc658e9eb9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" />
-keras始于易，止于简。</p>
+            <p><img src="https://upload-images.jianshu.io/upload_images/12348021-c6e180ef11675b5a.PNG?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="gradient descent" /></p>
 
-<p>什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。</p>
+<p>本文不会包含任何数学公式，内容将引起舒适。</p>
 
-<p>这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。</p>
+<p>说到神经网络的价值函数，或者是损失函数，也可以叫目标函数，随意啦，就不得不提反向传播，提到反向传播，就不得不提链式求导，梯度下降，提到梯度下降，那我就不得不抛出了上面的图片。</p>
 
-<p>步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer,</p>
+<p>简单描述一下这个寻优过程，初始化一个随机值，沿着梯度的反方向以一定的步子（不要太大）不停的迭代，就能寻找到一个比较不错的局部最小值，是不是很简单？你要问我什么是梯度下降，以及梯度下降与牛顿法的区别，以及为什么是局部最小，我不告诉你，我可以透露一点，多看几眼泰勒展开式。</p>
 
-<p>keras源码里关于Lambda 的文档是这样写的，“wraps arbitrary expression as a ‘Layer’ object”,翻译成中文, “将任意的表达式包装成层对象”，我认为这句话准确，精炼的阐述了它的含义，这里的表达式就可以是你用backend/后端（tensorflow, theano)写的某个函数，也可叫做功能模块吧。</p>
+<p>说了半天，并没有点题，价值函数到底是什么？上面讲到了反向传播，那么这里就讲讲正向传播了，回到神经网络建模过程，回想一下那个过程，你先建了个输入层，再紧接着连上一层接一层的隐藏层，最后一层为输出层，到了这里，你有了一个推理模型，行话叫Inference,哈哈。接着往下走，你的目的是训练模型，你手上有大把数据，以及每一个数据样本对应的标签，显然你要将数据丢进输入层，那么标签怎么办，监督学习，顾名思义，就是用标签监督你的输出层数据，你要让你的输出层数据和标签尽可能长得像，用数学一点的语言讲，就是让输出和标签的范数尽可能小，ok,还是有点绕，不急，总结一下，简单点，标签与输出的范数就是价值函数，对，就是那个范数，范数不懂，这里也不讲，反向传播干的事就是利用梯度下降法，去寻找那个局部最小值。你要问我价值函数到底长成什么样子，它就是上图的样子，只不过比它复杂得多，上图是三维的，它可能是上亿维的，是的，它的维数就是它的参数的数量，它的参数就是所有的隐藏层的参数，它的系数，是常数，就是你的样本数据和标签，它们都是已知的，都是常数，没错吧，到这里有没有一个巨长的函数出现在你的脑海里，回想一下它的变量，系数都是啥，想起来了吗？</p>
 
-<p>首先，我想解释一下“灵活性”这三个字，怎么理解深度学习建模过程中的灵活性, 我的理解是，灵活意味着你能够自定义你的网络层，而Lambda的出现就是为了实现这个功能的。</p>
+<p>到这里，我自认为我讲清楚了神经网络的价值函数，到这里就该结束了，看看我的题目，大大的漫谈两个字提醒着我，我还有话要讲，既然是漫谈，接下来的内容就可能是胡扯了。</p>
 
-<p>keras常规建模过程为：</p>
+<p>先下个定义，不知道为啥老想着下定义。
+任务的数学描述：每个任务都是在改变场景中某些物体的状态，用流态（fluent)来代表一种可以改变的状态。</p>
 
-<pre><code>from keras.layers import Input, Dense，Conv2D
-from keras.models import Model
-# This returns a tensor
-inputs = Input(shape=(784,))
-# a layer instance is callable on a tensor, and returns a tensor
-x = Conv2D(64, activation='relu')(inputs)
-x = Dense(64, activation='relu')(x)
-predictions = Dense(10, activation='softmax')(x)
-# This creates a model that includes
-# the Input layer and three Dense layers
-model = Model(inputs=inputs, outputs=predictions)
-model.compile(optimizer='rmsprop',loss='categorical_crossentropy', metrics=['accuracy'])
-model.fit(data, labels) # starts training
-</code></pre>
+<p>价值，价值观，价值函数，听起来应该有点近表亲的意思，可以探讨一下。</p>
 
-<p>在这样一个建模流程中，我们使用的都是Dense ,Conv2D…之类的定义好的layers,如果你想编写自己的layer就可以使用Lambda的功能了，
-先给出Lambda的初始化参数：</p>
+<p>天下熙熙，皆为利来，天下攘攘，皆为利往，人的每一次选择，每一个行为都是利益驱使的，话有点不大好听，但我是这样理解的，把驱动我们的利益看作价值函数，我们的目标是利益最大化，就是找到这个价值函数的最大值。把利益最大化看作一个任务，你在这个过程中的行为，就是在改变你和周围环境的状态，一步一步地，流态一步一步地改变，一步一步地达到一个准平衡态，直到它平衡，是不是特像梯度下降迭代的那个过程，只不过这里可能使梯度上升哦，毕竟，人往高处走。
+没错，还有水往低处流。
+一下高处走，一下低处流，要怎么理解，没错，我是学物理的，如果你也学物理，你一定能知道我接下来说的是什么？</p>
 
-<pre><code>Lambda(function, output_shape=None, mask=None, arguments=None, **kwargs)
-</code></pre>
+<p>保守力场都具有势能函数，人往高处走，水往低处流，本质一样，人和水都按照着各自的势能函数在流动，只不过他两的势能函数不一样而已啦。我们知道势能函数沿着与力相反的方向下降，力是什么，力不就是势能关于距离的一阶微分吗？这不就是梯度下降吗？
+最后谈谈价值观吧，同为人类，驱动人的势能函数因每个人的价值观不同而产生差异，那这里还有提价值函数的必要吗？有的，虽然价值观因人而异，但毕竟还是用通用的，叫常识也好，或者老美口中的普世价值也罢了，都是一个意思，有了这些东西，在一个多人的环境中，就有了竞争合作，就会形成社会规范，伦理道德。这些伦理，社会规范就是人群在竞争和合作中，收到外部物理环境的限制下，达成的暂时的准平衡态。请注意这里的限制，准平衡态，数学语言描述一下，边界条件的存在，形成的是一种具有概率意味的规则，因为边界条件随时可能变化，（如新的技术发明，像互联网，人工智能）或是政策改变（如改革开放），要注意因地制宜。
+终于讲完了，长舒了一口气，可能我也不知道我在讲什么。</p>
 
-<p>看两个例子，
-1. add a x -&gt; x^2 layer</p>
+<p>写在最后，
+深度学习，怎么理解”学习“二字，我们知道深度学习是数据驱动型的算法，学习有两种方式，归纳与演绎，我认为一个深度学习模型就是这两种学习方法的结合，正向传播就是一个归纳过程，反向传播就是一个演绎过程，好像这个理解有点鸡贼，放在哪里都可以，哈哈。</p>
 
-<pre><code>model.add(Lambda(lambda x: x ** 2))
-</code></pre>
+<p>还是要展望一下的，毕竟深度学习这么火，需要大数据驱动，大数据小任务范式，计算密集型，这是它的几个标签。虽然不得不承认它的过人之处，但还是要知道它的局限性，它离通用人工智能差得应该还很远，虽然我也不知道他离得多远，今天有个消息，百度徐伟出走，搞通用人工智能去了。
+数据驱动型算法就像是鹦鹉学舌吧，上限肉眼可见。但目前来说，它最厉害！
+任务驱动，知识图谱，可以了解一下。</p>
 
-<ol>
-<li>add a layer that returns the concatenation of the positive part of the input andthe opposite of the negative part
-<code>
-def antirectifier(x):
-x -= K.mean(x, axis=1, keepdims=True)
-x = K.l2_normalize(x, axis=1)
-pos = K.relu(x)
-neg = K.relu(-x)
-return K.concatenate([pos, neg], axis=1)
-def antirectifier_output_shape(input_shape):
-shape = list(input_shape)
-assert len(shape) == 2 # only valid for 2D tensors
-shape[-1] *= 2
-return tuple(shape)
-model.add(Lambda(antirectifier,output_shape=antirectifier_output_shape))
-</code>
-注意，我们可以使用匿名函数或者是定义一个函数来作为Lambda的function参数，Lambda还有一个参数是out_shape,你可以直接指定一个tuple或者定义一个函数（输入为input_shape),我在使用的过程中，也用到过arguments这个参数，它也字典的形式出现，keys为function的参数，这样能丰富你的层的功能，这里要通过解决实际问题来加深体会。</li>
-</ol>
+<p>原创不易，转载联系微信：1130223605</p>
 
-<p>说到这里，我们已经知道了Lambda 的一些基本使用方法，知道怎么用还不远远不够，做到会用，善用才算是比较好的掌握了，这里再谈谈我的使用Lambda的场景和经验吧。</p>
-
-<p>一个是keras相较于tensorflow而言，对于一些新出的层函数（这里指Conv2D这样的layers)并没有很好的支持，但我们可以使用tensorflw去构建层，然后用Lambda 包装成keras的layers,下面为yoloV2用到的space_to_depth的代码：</p>
-
-<pre><code>def space_to_depth_x2(x):
-    &quot;&quot;&quot;Thin wrapper for Tensorflow space_to_depth with block_size=2.&quot;&quot;&quot;
-    # Import currently required to make Lambda work.
-    # See: https://github.com/fchollet/keras/issues/5088#issuecomment-273851273
-    import tensorflow as tf
-    return tf.space_to_depth(x, block_size=2)
-
-def space_to_depth_x2_output_shape(input_shape):
-    &quot;&quot;&quot;Determine space_to_depth output shape for block_size=2.&quot;&quot;&quot;
-    return (input_shape[0], input_shape[1] // 2, input_shape[2] // 2, 4 *input_shape[3]) 
-            if input_shape[1] else (input_shape[0], None, None,4 * input_shape[3])
-
-Lambda(space_to_depth_x2,
-       output_shape=space_to_depth_x2_output_shape,
-       name='space_to_depth')(conv21)
-</code></pre>
-
-<p>另一个使用较多的场景就是我会用Lambda 来构建我自己的custom loss-layer,再看看前面写的keras常规建模过程，当我们完成建模后，model.compile()就指定了我们的loss-function,如果你想写出自己loss-function怎么办，我这里讲一种方法，在模型最后一层输出后，你可以再用Lambda 加一层，在这层里，你可以随意添加你的loss-function,注意，这里添加了loss-layer后，你的模型输出就不再始于测值y_pred了，而直接是loss值了，所以在训练过程中，你需要的是直接用优化器最小化这个值了，因此，需要改动一下model.compile(optimizer=’adam’, loss={‘custom_loss’: lambda y_ture, y_pred : y_pred}), 这里的loss的意思是我直接将模型的output(这里的y_pred)作为我的loss,跟前边模型构建过程中添加loss-layer的思路相同，这样的构建方式在目标检测算法（比如yoloV2)中就会用到，它的loss-function比较复杂，除了分类还要回归，就可以尝试这种构建方式，还有一个问题，loss={‘custom_loss’: lambda y_ture, y_pred : y_pred}这种写法牵扯到了另外一个概念，custom loss-function,这也是定制自己loss-function的一种不错的方法。具体参看：<a href="https://github.com/keras-team/keras/issues/4126">https://github.com/keras-team/keras/issues/4126</a>。
-下面给出具体的代码:</p>
-
-<pre><code>model_loss=Lambda(custom_loss,output_shape=(),name='custom_losss')(model_body.output)
-model=Model(model.input,model_loss)
-model.compile(optimizer='adam'，loss={'custom_loss': lambda y_true,y_pred : y_pred})
-model.fit(x,y=zeros(len(datas)) # y实际上没用，就当是个占位符
-</code></pre>
-
-<p>总结一下，keras还算是一个比较灵活的框架，前提是你也得学会tensorflow,因为当你在自定义你的网络的时候，你其实就相当于是在使用tensorflow了，keras和tensorflow联合构建你自己的深度学习模型，是个不错的选择。当你在联合使用这两个库的时候，除了在使用他们提供的的api，你也在联合两种编程逻辑，keras的模块式，tensorfow的数据流图。</p>
-
-<p>以上表述为个人理解所得，可能存在不清楚的地方，毕竟水平有限，随着经验的加深，会有更深的理解，所以还请见谅，共勉。</p>
-
-<p>references:
-allanzelener/YAD2K
-<a href="https://github.com/allanzelener/YAD2K">https://github.com/allanzelener/YAD2K</a>
-keras-team/keras
-<a href="https://github.com/keras-team/keras/blob/master/keras/layers/core.py">https://github.com/keras-team/keras/blob/master/keras/layers/core.py</a></p>
+<p>参考资料：
+浅谈人工智能：现状、任务、构架与统一</p>
 
           </div>
 
@@ -436,16 +372,16 @@ keras-team/keras
           <div class="row pt-3">
             <div class="col-md-6">
               
+                <a href=https://grayicon.github.io/post/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>Keras构建复杂模型的可行性</span>
+                  </div>
+                </a>
+              
             </div>
             
             <div class="col-md-6 text-right" >
-              
-                <a href=https://grayicon.github.io/post/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/ class="post-meta">Next
-                  <div class="pt-2 pb-5 flex-reverse">
-                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
-                    <span>漫谈神经网络价值函数</span>
-                  </div>
-                </a>
               
             </div>
           </div>
