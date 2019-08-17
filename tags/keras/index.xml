@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Keras on stoner</title>
+    <link>https://grayicon.github.io/tags/keras/</link>
+    <description>Recent content in Keras on stoner</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Fri, 16 Aug 2019 18:18:02 +0800</lastBuildDate>
+    
+	<atom:link href="https://grayicon.github.io/tags/keras/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Keras构建复杂模型的可行性</title>
+      <link>https://grayicon.github.io/post/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/</link>
+      <pubDate>Fri, 16 Aug 2019 18:18:02 +0800</pubDate>
+      
+      <guid>https://grayicon.github.io/post/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/</guid>
+      <description>keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里</description>
+    </item>
+    
+  </channel>
+</rss>
