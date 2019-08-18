@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="stoner">
+  <meta name="description" content="keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里">
+  
+  <meta property="og:title" content="Keras构建复杂模型的可行性" />
+<meta property="og:description" content="keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://grayicon.github.io/blog/2019-08/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/" />
+
+
+
+<meta property="article:published_time" content="2019-08-16T18:18:02&#43;08:00"/>
+
+<meta property="article:modified_time" content="2019-08-16T18:18:02&#43;08:00"/>
+
+
+
+
+
+
+  
+  
+    <meta property="og:see_also" content="https://grayicon.github.io/blog/2019-08/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/" />
+  
+    
+  
+
+
+
+
+
+
+
+
+  <title>
+  
+       Keras构建复杂模型的可行性 | stoner 
+  
+  </title>
+
+  <link rel="canonical" href="https://grayicon.github.io/blog/2019-08/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/">
+
+  
+  
+
+  
+  <link href="https://grayicon.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://grayicon.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://grayicon.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://grayicon.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://grayicon.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://grayicon.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://grayicon.github.io/img/stone.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://grayicon.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://grayicon.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://grayicon.github.io/">
+          
+        <strong> stoner</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://grayicon.github.io/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/blog/" >Blog  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/moment/" >Moment  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://grayicon.github.io/img/header-slides/background.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://grayicon.github.io/img/header-slides//bg.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://grayicon.github.io/">
+          
+            <img class="pull-right avatar avatar-md" src="https://grayicon.github.io/img/stone.jpg" alt="">
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://grayicon.github.io/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>stoner</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/grayicon" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/gray1993" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:grayicon@163.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="container pr-5">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://grayicon.github.io/categories/%E6%95%B0%E5%AD%A6"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 数学 </a></li>
+      
+    
+    
+      
+        <li><a href="https://grayicon.github.io/series/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><i class="fas fa-bookmark pr-1" aria-hidden="true"></i>神经网络</a></li>
+      
+    
+  </ul>
+
+  <div class="px-4 post-heading">Keras构建复杂模型的可行性</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Aug 16, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>5 minutes read</li>
+    
+  </ul>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            <p><img src="https://upload-images.jianshu.io/upload_images/12348021-db9030cc658e9eb9.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="" />
+keras始于易，止于简。</p>
+
+<p>什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。</p>
+
+<p>这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。</p>
+
+<p>步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer,</p>
+
+<p>keras源码里关于Lambda 的文档是这样写的，“wraps arbitrary expression as a ‘Layer’ object”,翻译成中文, “将任意的表达式包装成层对象”，我认为这句话准确，精炼的阐述了它的含义，这里的表达式就可以是你用backend/后端（tensorflow, theano)写的某个函数，也可叫做功能模块吧。</p>
+
+<p>首先，我想解释一下“灵活性”这三个字，怎么理解深度学习建模过程中的灵活性, 我的理解是，灵活意味着你能够自定义你的网络层，而Lambda的出现就是为了实现这个功能的。</p>
+
+<p>keras常规建模过程为：</p>
+
+<pre><code>from keras.layers import Input, Dense，Conv2D
+from keras.models import Model
+# This returns a tensor
+inputs = Input(shape=(784,))
+# a layer instance is callable on a tensor, and returns a tensor
+x = Conv2D(64, activation='relu')(inputs)
+x = Dense(64, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+# This creates a model that includes
+# the Input layer and three Dense layers
+model = Model(inputs=inputs, outputs=predictions)
+model.compile(optimizer='rmsprop',loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(data, labels) # starts training
+</code></pre>
+
+<p>在这样一个建模流程中，我们使用的都是Dense ,Conv2D…之类的定义好的layers,如果你想编写自己的layer就可以使用Lambda的功能了，
+先给出Lambda的初始化参数：</p>
+
+<pre><code>Lambda(function, output_shape=None, mask=None, arguments=None, **kwargs)
+</code></pre>
+
+<p>看两个例子，
+1. add a x -&gt; x^2 layer</p>
+
+<pre><code>model.add(Lambda(lambda x: x ** 2))
+</code></pre>
+
+<ol>
+<li>add a layer that returns the concatenation of the positive part of the input andthe opposite of the negative part
+<code>
+def antirectifier(x):
+x -= K.mean(x, axis=1, keepdims=True)
+x = K.l2_normalize(x, axis=1)
+pos = K.relu(x)
+neg = K.relu(-x)
+return K.concatenate([pos, neg], axis=1)
+def antirectifier_output_shape(input_shape):
+shape = list(input_shape)
+assert len(shape) == 2 # only valid for 2D tensors
+shape[-1] *= 2
+return tuple(shape)
+model.add(Lambda(antirectifier,output_shape=antirectifier_output_shape))
+</code>
+注意，我们可以使用匿名函数或者是定义一个函数来作为Lambda的function参数，Lambda还有一个参数是out_shape,你可以直接指定一个tuple或者定义一个函数（输入为input_shape),我在使用的过程中，也用到过arguments这个参数，它也字典的形式出现，keys为function的参数，这样能丰富你的层的功能，这里要通过解决实际问题来加深体会。</li>
+</ol>
+
+<p>说到这里，我们已经知道了Lambda 的一些基本使用方法，知道怎么用还不远远不够，做到会用，善用才算是比较好的掌握了，这里再谈谈我的使用Lambda的场景和经验吧。</p>
+
+<p>一个是keras相较于tensorflow而言，对于一些新出的层函数（这里指Conv2D这样的layers)并没有很好的支持，但我们可以使用tensorflw去构建层，然后用Lambda 包装成keras的layers,下面为yoloV2用到的space_to_depth的代码：</p>
+
+<pre><code>def space_to_depth_x2(x):
+    &quot;&quot;&quot;Thin wrapper for Tensorflow space_to_depth with block_size=2.&quot;&quot;&quot;
+    # Import currently required to make Lambda work.
+    # See: https://github.com/fchollet/keras/issues/5088#issuecomment-273851273
+    import tensorflow as tf
+    return tf.space_to_depth(x, block_size=2)
+
+def space_to_depth_x2_output_shape(input_shape):
+    &quot;&quot;&quot;Determine space_to_depth output shape for block_size=2.&quot;&quot;&quot;
+    return (input_shape[0], input_shape[1] // 2, input_shape[2] // 2, 4 *input_shape[3]) 
+            if input_shape[1] else (input_shape[0], None, None,4 * input_shape[3])
+
+Lambda(space_to_depth_x2,
+       output_shape=space_to_depth_x2_output_shape,
+       name='space_to_depth')(conv21)
+</code></pre>
+
+<p>另一个使用较多的场景就是我会用Lambda 来构建我自己的custom loss-layer,再看看前面写的keras常规建模过程，当我们完成建模后，model.compile()就指定了我们的loss-function,如果你想写出自己loss-function怎么办，我这里讲一种方法，在模型最后一层输出后，你可以再用Lambda 加一层，在这层里，你可以随意添加你的loss-function,注意，这里添加了loss-layer后，你的模型输出就不再始于测值y_pred了，而直接是loss值了，所以在训练过程中，你需要的是直接用优化器最小化这个值了，因此，需要改动一下model.compile(optimizer=’adam’, loss={‘custom_loss’: lambda y_ture, y_pred : y_pred}), 这里的loss的意思是我直接将模型的output(这里的y_pred)作为我的loss,跟前边模型构建过程中添加loss-layer的思路相同，这样的构建方式在目标检测算法（比如yoloV2)中就会用到，它的loss-function比较复杂，除了分类还要回归，就可以尝试这种构建方式，还有一个问题，loss={‘custom_loss’: lambda y_ture, y_pred : y_pred}这种写法牵扯到了另外一个概念，custom loss-function,这也是定制自己loss-function的一种不错的方法。具体参看：<a href="https://github.com/keras-team/keras/issues/4126" target="_blank">https://github.com/keras-team/keras/issues/4126</a>。
+下面给出具体的代码:</p>
+
+<pre><code>model_loss=Lambda(custom_loss,output_shape=(),name='custom_losss')(model_body.output)
+model=Model(model.input,model_loss)
+model.compile(optimizer='adam'，loss={'custom_loss': lambda y_true,y_pred : y_pred})
+model.fit(x,y=zeros(len(datas)) # y实际上没用，就当是个占位符
+</code></pre>
+
+<p>总结一下，keras还算是一个比较灵活的框架，前提是你也得学会tensorflow,因为当你在自定义你的网络的时候，你其实就相当于是在使用tensorflow了，keras和tensorflow联合构建你自己的深度学习模型，是个不错的选择。当你在联合使用这两个库的时候，除了在使用他们提供的的api，你也在联合两种编程逻辑，keras的模块式，tensorfow的数据流图。</p>
+
+<p>以上表述为个人理解所得，可能存在不清楚的地方，毕竟水平有限，随着经验的加深，会有更深的理解，所以还请见谅，共勉。</p>
+
+<p>references:
+allanzelener/YAD2K
+<a href="https://github.com/allanzelener/YAD2K" target="_blank">https://github.com/allanzelener/YAD2K</a>
+keras-team/keras
+<a href="https://github.com/keras-team/keras/blob/master/keras/layers/core.py" target="_blank">https://github.com/keras-team/keras/blob/master/keras/layers/core.py</a></p>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://grayicon.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://grayicon.github.io/tags/keras" role="button">keras </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://grayicon.github.io/blog/1-01/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span></span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+                <a href=https://grayicon.github.io/blog/2019-08/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/ class="post-meta">Next
+                  <div class="pt-2 pb-5 flex-reverse">
+                    <i class="fas fa-angle-right text-grey font-weight-bold ml-2 active-color"></i>
+                    <span>漫谈神经网络价值函数</span>
+                  </div>
+                </a>
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/grayicon " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+      <a href="//linkedin.com/in/gray1993" target="_blank" rel="noopener"><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:grayicon@163.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2019 &copy; | Theme <a href='https://github.com/orianna-zzo/AllinOne' target="_blank">AllinOne</a> by <a href='https://github.com/orianna-zzo' target="_blank">Orianna</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://grayicon.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://grayicon.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://grayicon.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://grayicon.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
