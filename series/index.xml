@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>stoner</title>
+    <title>Series on stoner</title>
     <link>https://grayicon.github.io/series/</link>
-    <description>Recent content on stoner</description>
+    <description>Recent content in Series on stoner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
     <lastBuildDate>Mon, 19 Aug 2019 09:48:52 +0800</lastBuildDate>
@@ -12,12 +12,21 @@
     
     
     <item>
-      <title>Test</title>
-      <link>https://grayicon.github.io/blog/2019-08/test/</link>
+      <title></title>
+      <link>https://grayicon.github.io/series/</link>
       <pubDate>Mon, 19 Aug 2019 09:48:52 +0800</pubDate>
       
-      <guid>https://grayicon.github.io/blog/2019-08/test/</guid>
-      <description>一级 一级2 一级3 一级4</description>
+      <guid>https://grayicon.github.io/series/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>神经网络</title>
+      <link>https://grayicon.github.io/series/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</link>
+      <pubDate>Fri, 16 Aug 2019 18:31:57 +0800</pubDate>
+      
+      <guid>https://grayicon.github.io/series/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/</guid>
+      <description></description>
     </item>
     
   </channel>

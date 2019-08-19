@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on stoner</title>
+    <title>stoner</title>
     <link>https://grayicon.github.io/categories/</link>
-    <description>Recent content in Categories on stoner</description>
+    <description>Recent content on stoner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
     <lastBuildDate>Mon, 19 Aug 2019 09:48:52 +0800</lastBuildDate>
@@ -12,21 +12,12 @@
     
     
     <item>
-      <title></title>
-      <link>https://grayicon.github.io/categories/</link>
+      <title>Test</title>
+      <link>https://grayicon.github.io/blog/2019-08/test/</link>
       <pubDate>Mon, 19 Aug 2019 09:48:52 +0800</pubDate>
       
-      <guid>https://grayicon.github.io/categories/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>数学</title>
-      <link>https://grayicon.github.io/categories/%E6%95%B0%E5%AD%A6/</link>
-      <pubDate>Fri, 16 Aug 2019 18:31:57 +0800</pubDate>
-      
-      <guid>https://grayicon.github.io/categories/%E6%95%B0%E5%AD%A6/</guid>
-      <description></description>
+      <guid>https://grayicon.github.io/blog/2019-08/test/</guid>
+      <description>一级 一级2 一级3 一级4</description>
     </item>
     
   </channel>
