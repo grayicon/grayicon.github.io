@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://grayicon.github.io/blog/2019-08/test/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://grayicon.github.io/blog/2019-08/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/</loc>
     <lastmod>2019-08-16T18:31:57+08:00</lastmod>
   </url>
@@ -13,13 +18,32 @@
   </url>
   
   <url>
+    <loc>https://grayicon.github.io/categories/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://grayicon.github.io/tags/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://grayicon.github.io/series/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://grayicon.github.io/blog/</loc>
-    <lastmod>2019-08-16T18:31:57+08:00</lastmod>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://grayicon.github.io/categories/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -31,18 +55,19 @@
   
   <url>
     <loc>https://grayicon.github.io/series/</loc>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://grayicon.github.io/tags/</loc>
-    <lastmod>2019-08-16T18:18:02+08:00</lastmod>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://grayicon.github.io/</loc>
-    <lastmod>2019-08-16T18:31:57+08:00</lastmod>
+    <lastmod>2019-08-19T09:48:52+08:00</lastmod>
     <priority>0</priority>
   </url>
   
