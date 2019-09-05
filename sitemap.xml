@@ -18,6 +18,15 @@
   </url>
   
   <url>
+    <loc>https://grayicon.github.io/about/me/</loc>
+  </url>
+  
+  <url>
+    <loc>https://grayicon.github.io/about/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://grayicon.github.io/blog/</loc>
     <lastmod>2019-09-05T01:11:27+08:00</lastmod>
     <priority>0</priority>
