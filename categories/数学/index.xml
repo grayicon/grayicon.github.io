@@ -6,10 +6,19 @@
     <description>Recent content in 数学 on stoner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
-    <lastBuildDate>Thu, 05 Sep 2019 01:11:27 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 26 Feb 2020 01:11:27 +0800</lastBuildDate>
     
 	<atom:link href="https://grayicon.github.io/categories/%E6%95%B0%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>浅谈机器学习</title>
+      <link>https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 26 Feb 2020 01:11:27 +0800</pubDate>
+      
+      <guid>https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</guid>
+      <description>前言 借这篇文章谈一谈机器学习，通过自上而下的方式去构建整个机器学习系统，尽可能做到深入浅出，提供了机器学习构建的方法论和一些数学直觉、行业动态。 1.机器学习是什么？ 通过机器构造一个系统能自动地从数据中蒸馏出知识和推理 2.机器学习的分类 按学习范式分： 监督学习：通过标注信息学习，目前广泛应用于文本，语音，图像等拥有庞大数据集的场景，依赖人工标记，耗时耗力，无法保证人工标注的准确性。 强化学习：透过奖惩机</description>
+    </item>
     
     <item>
       <title>揭开数学的面纱</title>
@@ -18,24 +27,6 @@
       
       <guid>https://grayicon.github.io/blog/2019-09/%E6%8F%AD%E5%BC%80%E6%95%B0%E5%AD%A6%E7%9A%84%E9%9D%A2%E7%BA%B1/</guid>
       <description>这是一篇关于数学的入门文章，也是一篇数学学习的回忆录与反思录。 缘起 从我的教育背景说起，本科光电子专业，研究生光学工程，中途上了计算机视觉的车；作为一名工科生出身，以及在后面做职业规划时给自己工程师的定位，从始至终，我都没想过我会如此认真地对待数学这门学科，并且对他的喜爱是日渐加深，那种感觉，就像是找到一个值得托付的人。回过头来，到底是什么东西指引我进入数学这个偌大的王国，又是什么让我在里边流连忘返</description>
-    </item>
-    
-    <item>
-      <title>漫谈神经网络价值函数</title>
-      <link>https://grayicon.github.io/blog/2019-08/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/</link>
-      <pubDate>Fri, 16 Aug 2019 18:31:57 +0800</pubDate>
-      
-      <guid>https://grayicon.github.io/blog/2019-08/%E6%BC%AB%E8%B0%88%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%B7%E5%80%BC%E5%87%BD%E6%95%B0/</guid>
-      <description>说到神经网络的价值函数，或者是损失函数，也可以叫目标函数，随意啦，就不得不提反向传播，提到反向传播，就不得不提链式求导，梯度下降，提到梯度下降，那我就不得不抛出了上面的图片。 简单描述一下这个寻优过程，初始化一个随机值，沿着梯度的反方向以一定的步子（不要太大）不停的迭代，就能寻找到一个比较不错的局部最小值，是不是很简单？你要问我什么是梯度下降，以及梯度下降与牛顿法的区别，以及为什么是局部最小，我不告</description>
-    </item>
-    
-    <item>
-      <title>Keras构建复杂模型的可行性</title>
-      <link>https://grayicon.github.io/blog/2019-08/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/</link>
-      <pubDate>Fri, 16 Aug 2019 18:18:02 +0800</pubDate>
-      
-      <guid>https://grayicon.github.io/blog/2019-08/keras%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8F%AF%E8%A1%8C%E6%80%A7/</guid>
-      <description>keras始于易，止于简。 什么意思呢？多少人是因为对keras建模过程的友好程度而上手keras，又有多少人因为keras的高度封装造成的欠灵活性而开始累觉不爱。 这里介绍一下keras的Lambda层，希望在掌握了这个trick后，能多多少少拾回些许使用keras的信心。 步入正题，Lambda，顾名思义，和python的lambda含义是类似的，这里指的是具有某种功能的layer, keras源码里</description>
     </item>
     
   </channel>

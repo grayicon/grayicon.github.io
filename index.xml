@@ -6,10 +6,19 @@
     <description>Recent content on stoner</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
-    <lastBuildDate>Thu, 05 Sep 2019 01:11:27 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 26 Feb 2020 01:11:27 +0800</lastBuildDate>
     
 	<atom:link href="https://grayicon.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>浅谈机器学习</title>
+      <link>https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 26 Feb 2020 01:11:27 +0800</pubDate>
+      
+      <guid>https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</guid>
+      <description>前言 借这篇文章谈一谈机器学习，通过自上而下的方式去构建整个机器学习系统，尽可能做到深入浅出，提供了机器学习构建的方法论和一些数学直觉、行业动态。 1.机器学习是什么？ 通过机器构造一个系统能自动地从数据中蒸馏出知识和推理 2.机器学习的分类 按学习范式分： 监督学习：通过标注信息学习，目前广泛应用于文本，语音，图像等拥有庞大数据集的场景，依赖人工标记，耗时耗力，无法保证人工标注的准确性。 强化学习：透过奖惩机</description>
+    </item>
     
     <item>
       <title>揭开数学的面纱</title>

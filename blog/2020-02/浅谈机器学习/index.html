@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="stoner">
+  <meta name="description" content="前言 借这篇文章谈一谈机器学习，通过自上而下的方式去构建整个机器学习系统，尽可能做到深入浅出，提供了机器学习构建的方法论和一些数学直觉、行业动态。 1.机器学习是什么？ 通过机器构造一个系统能自动地从数据中蒸馏出知识和推理 2.机器学习的分类 按学习范式分： 监督学习：通过标注信息学习，目前广泛应用于文本，语音，图像等拥有庞大数据集的场景，依赖人工标记，耗时耗力，无法保证人工标注的准确性。 强化学习：透过奖惩机">
+  
+  <meta property="og:title" content="浅谈机器学习" />
+<meta property="og:description" content="前言 借这篇文章谈一谈机器学习，通过自上而下的方式去构建整个机器学习系统，尽可能做到深入浅出，提供了机器学习构建的方法论和一些数学直觉、行业动态。 1.机器学习是什么？ 通过机器构造一个系统能自动地从数据中蒸馏出知识和推理 2.机器学习的分类 按学习范式分： 监督学习：通过标注信息学习，目前广泛应用于文本，语音，图像等拥有庞大数据集的场景，依赖人工标记，耗时耗力，无法保证人工标注的准确性。 强化学习：透过奖惩机" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" />
+
+
+
+<meta property="article:published_time" content="2020-02-26T01:11:27&#43;08:00"/>
+
+<meta property="article:modified_time" content="2020-02-26T01:11:27&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+  <title>
+  
+       浅谈机器学习 | stoner 
+  
+  </title>
+
+  <link rel="canonical" href="https://grayicon.github.io/blog/2020-02/%E6%B5%85%E8%B0%88%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">
+
+  
+  
+
+  
+  <link href="https://grayicon.github.io/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://grayicon.github.io/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://grayicon.github.io/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://grayicon.github.io/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://grayicon.github.io/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://grayicon.github.io/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://grayicon.github.io/img/stone.jpg"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://grayicon.github.io/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://grayicon.github.io/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://grayicon.github.io/">
+          
+        <img class="avatar" src="https://grayicon.github.io/img/stone.jpg" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> stoner</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://grayicon.github.io/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/blog/" >Blog  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/moment/" >Moment  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://grayicon.github.io/about/" >About Me  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://grayicon.github.io/img/header-slides/background.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+      
+
+        
+        <div class="carousel-item">
+          <div class="view" style="background-image: url('https://grayicon.github.io/img/header-slides//bg.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+            
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://grayicon.github.io/">
+          
+            <img class="pull-right avatar avatar-md" src="https://grayicon.github.io/img/stone.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://grayicon.github.io/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>stoner</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="//github.com/grayicon" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="//linkedin.com/in/gray1993" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:grayicon@163.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://grayicon.github.io/categories/%E6%95%B0%E5%AD%A6"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> 数学 </a></li>
+      
+    
+    
+  </ul>
+
+  <div class="px-4 post-heading">浅谈机器学习</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Feb 26, 2020</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>11 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://grayicon.github.io/images/blog/2020-2/machinelearning.jpg" />
+    </div>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            <h1 id="前言">前言</h1>
+
+<p>借这篇文章谈一谈机器学习，通过自上而下的方式去构建整个机器学习系统，尽可能做到深入浅出，提供了机器学习构建的方法论和一些数学直觉、行业动态。</p>
+
+<h1 id="1机器学习是什么">1.机器学习是什么？</h1>
+
+<p>通过机器构造一个系统能自动地从数据中蒸馏出知识和推理</p>
+
+<h1 id="2机器学习的分类">2.机器学习的分类</h1>
+
+<h2 id="按学习范式分">按学习范式分：</h2>
+
+<p><strong>监督学习</strong>：通过标注信息学习，目前广泛应用于文本，语音，图像等拥有庞大数据集的场景，依赖人工标记，耗时耗力，无法保证人工标注的准确性。</p>
+
+<p><strong>强化学习</strong>：透过奖惩机制学习，让机器在场景中不断试错，累积经验来学习，适用于游戏等虚拟场景，能快速积累足够的样本空间，并实时获得反馈,学习效率低下，不易收敛。</p>
+
+<p><strong>自监督学习</strong>：是克服以上两种学习范式中的问题的解决方案之一，透过预测来认识世界，类似人类学习过程，不断通过已知部分预测未知，目前是一个前沿课题。例如预测到车子可能会撞到前方路障就提前进行规避动作，不需要人工标注路障需要避开，更不需要试错去累积经验。</p>
+
+<p><strong>无监督学习</strong>：专注于数据的自身结构，学习数据的表示和分布；用于数据的降维，编码，与生成。</p>
+
+<h2 id="按建模方式分">按建模方式分：</h2>
+
+<p><a href="https://robotics.stanford.edu/~ang/papers/nips01-discriminativegenerative.pdf">判别模型</a>是直接基于后验条件概率进行建模，而<strong>生成模型</strong>是对联合分布进行建模；生成模型可以推到判别后验式子，但判别模型却无法推断出联合分布。</p>
+
+<h1 id="3如何构建机器学习系统">3.如何构建机器学习系统？</h1>
+
+<h2 id="31机器学习系统组件">3.1机器学习系统组件</h2>
+
+<p>数据、模型、策略，算法</p>
+
+<h3 id="数据">数据</h3>
+
+<p>数学载体：向量为主，也包括矩阵，张量，稀疏矩阵，稀疏张量等；</p>
+
+<p>包含的操作：清洗，编码，归一化，标准化，白化，以及相应的线性代数操作(包括旋转，投影，等)</p>
+
+<h3 id="模型">模型</h3>
+
+<p>数学载体：在监督学习中，模型为参数化的函数（函数族）和条件概率分布（分布族）；</p>
+
+<p>函数和条件概率分布均可在判别式模型中充当决策器（或者预测器）的角色，比如感知机，逻辑斯蒂回归，支持向量机等；但在生成模型中，需要用概率论的语言来描述模型，比如朴素贝叶斯，高斯混合模型（GMM)，隐马尔科(HMM）等。</p>
+
+<p>包含的操作：函数的复合操作（神经网络的分层表示），函数的分解与近似（矩阵运算的近似，用于后期模型压缩）；概率分布的边缘化(marginalisation)操作（加法），实现联合分布到边缘分布的转换；贝叶斯公式，表示后验概率与先验概率、似然、证据三者之间的关系（乘除法）；</p>
+
+<h3 id="策略">策略</h3>
+
+<p>目的：通过参数学习，使得模型在未见过的数据上（测试集）拥有良好的性能(（通过评价指标衡量）。</p>
+
+<p>方法：通过最小化期望风险选择模型；</p>
+
+<p>实现方式：通过引入损失函数度量单次预测错误的程度，每个样本求得的损失函数值乘上出现的概率值，在整个样本空间求和可得期望风险，度量整个分布上的损失。由于联合分布不可知，故通过在训练集中最小化期望风险的统计值（经验风险）代替，当样本数N足够大时，经验风险是期望风险的无偏估计。</p>
+
+<p>局限性：当样本不够大的时候，最小化经验风险的学习方式效果不一定理想，有可能产生“过拟合”现象。这个时候会引入结构风险，也称正则项。</p>
+
+<h4 id="算法">算法</h4>
+
+<p>当数据集，模型，损失函数，以及策略确定后，经验风险最小化的过程就是求一个最优化问题最优解的问题。</p>
+
+<p>不同的模型决定了不同的目标函数，有的可以直接求解析解，比如线性回归；有的没有解析解，需要数值方法，不同的的函数有不同的数值求解方法，常见的有梯度下降及其相关算法，牛顿法，拟牛顿法，EM算法等迭代算法；评价数值算法的性能只有一个原则，又好又快，好体现在找到全局最优，快体现在迭代次数少，单次计算量小。</p>
+
+<h2 id="32-如何构建机器学习系统直觉经验or数学基础">3.2 如何构建机器学习系统——直觉，经验or数学基础</h2>
+
+<p>完整的机器学习系统拥有数据，模型，策略，算法四个组件，面对不同的应用场景，通过更换不同型号的组件，改变系统的形态，以适应该应用场景需求。</p>
+
+<p>如何选取不同型号的组件，以及把最终的成品打磨好，绝对是一项技术活，在深度学习中，这个过程也叫炼丹，要想成为优秀的<a href="https://zhuanlan.zhihu.com/p/23781756">炼丹师</a>，绝非易事。炼丹这种说法非常的玄学，其中到底有什么门道，让我们尝试着对各个组件依次进行扫描。</p>
+
+<h3 id="两副眼镜几何和概率论">两副眼镜——“几何”和“概率论”</h3>
+
+<h4 id="始于线性回归">&quot;始于线性回归&quot;</h4>
+
+<p>线性回归的公式：</p>
+
+<p><span  class="math">\[f(\boldsymbol{x})=\boldsymbol{x}^{\top} \boldsymbol{\theta}\]</span></p>
+
+<p>戴上“几何”眼镜，在几何视角下，数据是用向量表示的，所谓向量，是线性空间的一个“点”；模型为线性模型，数据进入模型中，这里的模型为线性函数，可看做一个算子，实质为线性变换，经过变换后最终输出也是一个”点“，只不过这个点是一维的；在使用策略时，假设输出的这些点处于欧式空间中，那么就可以使用欧式距离来度量回归的预测值和真实值的距离，不同的空间有不同的距离定义，这里可以选取不同的距离函数，除了欧氏距离，其他的还有曼哈顿距离，余弦距离，汉明距离，等等。为什么这里选择欧式距离，我想还是一种直觉吧,至此，可以最小化经验风险了;算法，可以看到这里的目标函数是一个凸函数，并且有解析解，可以直接得出要估计的参数值。</p>
+
+<p>再换上”概率“这副眼镜重新审视一下”线性回归“：
+数据，模型，和前面一样，不再赘述。在策略这一步，将数据集中的标签值看做观测值，模型回归的值看做生成值，观测值和生成值是有一定误差的，这个误差是什么？是否满足一定的分布？就跟之前的距离函数的选取一样，这里我们也是只凭经验直觉，经验告诉我们噪声分可能是高斯噪声，也有可能是泊松噪声，等等。这里对噪声有先验知识，假设选取最常见高斯噪声，至此就可以写出观测值的分布，通过求解条件分布的极大似然参数估计，得到最终的线性模型的参数。
+形式化公式：</p>
+
+<p><span  class="math">\[y_{n}=f\left(x_{n}\right)+\epsilon,\epsilon \sim \mathcal{N}\left(0, \sigma^{2}\right)\]</span></p>
+
+<p><span  class="math">\[p(y | \boldsymbol{x})=\mathcal{N}\left(y | f(\boldsymbol{x}), \sigma^{2}\right)\Longleftrightarrow y=x^{\top} \boldsymbol{\theta}+\epsilon\]</span></p>
+
+<p>让我们写出最后的参数结果：</p>
+
+<p><span  class="math">\[\theta_{\mathrm{ML}}=\left(\boldsymbol{X}^{\top} \boldsymbol{X}\right)^{-1} \boldsymbol{X}^{\top} \boldsymbol{y}=\frac{\boldsymbol{X}^{\top} \boldsymbol{y}}{\boldsymbol{X}^{\top} \boldsymbol{X}}\]</span></p>
+
+<p>”几何视角“下作欧氏距离假设，和”概率视角“作高斯噪声的假设下，得到的结果是一样的，具体过程可自行推导，经常用到的均方差放在概率视角下看也是高斯噪声。
+将数据集输入求出的模型中，得：</p>
+
+<p><span  class="math">\[\boldsymbol{X} \theta_{\mathrm{ML}}=\boldsymbol{X} \frac{\boldsymbol{X}^{\top} \boldsymbol{y}}{\boldsymbol{X}^{\top} \boldsymbol{X}}=\frac{\boldsymbol{X} \boldsymbol{X}^{\top}}{\boldsymbol{X}^{\top} \boldsymbol{X}} \boldsymbol{y},\]</span></p>
+
+<p>如果你熟悉正交投影的话，仔细一看，你会发现生成值<span  class="math">\(\boldsymbol{X} \theta_{\mathrm{ML}}\)</span>恰好是观测值<span  class="math">\(y\)</span>在<span  class="math">\(X\)</span>张成的子空间的正交投影,这给了之前”最小化平均欧氏距离“几何解释。</p>
+
+<p>对比两种视角下的建模过程的策略阶段，我们发现几何直觉的优点是更直接，几何图像更有助于记忆，但某些情况下我们无法确定输出空间结构，无法靠直觉写出距离函数；在概率框架下，我们研究过很多概率分布，可以很方便的对最后的预测值（条件分布值）进行概率建模。引入概率框架后，可以很方便的利用贝叶斯定理，嵌入参数的分布信息，对参数进行极大后验估计，取对数后，贝叶斯定理中的乘法因子变成目标函数后面的加法因子，这和正则项是对应的，L1正则项对应期望为零的拉普拉斯先验分布(LASSO回归)，L2正则项对应期望为零的高斯先验分布(岭回归）。除此之外，概率框架下除了能点估计，还能进行区间估计，既能输出预测值，还能输出预测值的概率，”概率视角“下的机器学习帮助我们理解了很多概念，包括损失函数，正则项，等等，是很有利的武器。</p>
+
+<h4 id="从线性到非线性">从”线性“到”非线性“</h4>
+
+<p>重写线性回归公式：</p>
+
+<p><span  class="math">\[y=\phi^{\top}(x) \boldsymbol{\theta}+\epsilon\]</span></p>
+
+<p>输入不再是<span  class="math">\( \boldsymbol{x}\)</span>,变成了<span  class="math">\(\phi^{\top}(x)\)</span>，我们对feature进行线性回归，比如多项式回归，写作：</p>
+
+<p><span  class="math">\[\phi(x)=\left[\begin{array}{c}
+{\phi_{0}(x)}\\
+{\phi_{1}(x)}\\
+{\vdots}\\
+{\phi_{K-1}(x)}
+\end{array}\right]=\left[\begin{array}{c}
+{1}\\
+{x}\\
+{x^{3}}\\
+{x^{3}}\\
+{\vdots}\\
+{x^{K-1}}
+\end{array}\right] \in \mathbb{R}^{K},\]</span></p>
+
+<p>通过泰勒展开，无限增加多项式的维度，我们知道多项式回归就能拟合任意的曲线。这样就把一个非线性的问题统一到了线性回归的框架下，只是同样的参数向量表达了不同的意义，因为它们的基向量发生了改变，不同的基向量对应了不同的特征空间。如何表示特征空间，不同的算法采用了不同的数学技巧。神经网络通过施加<span  class="math">\(f_{K-1} \circ \cdots \circ f_{0}\)</span>多层特征变换，每一层为一个仿射变换后接一个非线性变换（激活函数），（<a href="https://tinyurl.com/glm-dnn">神经网络广义线性模型解释</a>和<a href="colah.github.io/posts/2014-03-NN-Manifolds-Topology/">神经网络的拓扑解释</a>）；支持向量机使用了”核技巧”，通过无穷升维使得线性不可分变得线性可分。</p>
+
+<p>关于特征的提取衍生了传统的机器学习派和如今大热的深度学习派。以前的特征工程通过手工提取特征使得特征提取具有一定的解释性，在数据量较小的情况下效果是可以的，可说是特征工程，其实也是“专家工程&quot;,没有强悍的领域知识，没有办法提取好的特征。以前的行人识别就是先提取“HOG”特征，再用“SVM&quot;进行分类，这样的弊端是一个特征工程可能就是好几十年的心血，并且提取的特质是人的有限经验，上限不高；深度学习的兴起，使得特征提取的过程变得自动了，模型根据数据集自己学习特征，实验证明这种分层表示学习范式具有很好的效果，只是其数学理论证明还未出现。</p>
+
+<p>有了特征自动提取，可以随意想象一下他所蕴含的能量。以前有傅里叶变换，帮助我们获得谱空间的表示，频谱表示是一个无穷维的向量，频谱表示后的特征适合做滤波这类的事情。傅里叶变换是数学变换，但是有着完美的物理意义，而现在通过网络模型对输入向量进行空间变换可以完成更复杂，更高级的任务，我们的基坐标不再是频率了，可以是任意复杂的，人们无法认知的特征基。这样的特征是通过数据驱动学习到的，以匹配特定的任务。这样做的好处是只要算力和数据到位，能快速解决复杂问题；缺点就是模型偏复杂，有参数冗余，解释性差，不像物理方程那么简洁，物理方程的物理参数是有具体物理意义的，并且迁移性也较差，是针对特定任务训练出来的。但优缺点是相对的，看更看重哪方面，其实想想也能说得过去，物理世界也没有大一统，没有哪个方程能解释整个宇宙，爱因斯坦没做到，不知道以后有没有人会做到。</p>
+
+<h4 id="从回归到分类">从”回归“到”分类“：</h4>
+
+<p>回归的输出是连续值，分类的输出是离散值。在分类任务里，线性回归后的输出不是一个实数，而是一个<span  class="math">\(\mathbb{R}^{N}\)</span>向量，N是类别数，后面再加上一个非线性变换，比如二分类的就是sigmoid函数，多分类就是softmax函数。这样做的目的是使得输出为一个概率空间。概率空间的特点是，每个分量都为正数，分量的代数和为1，这样，就可以统一损失函数了。在概率论中，衡量两个分布的距离函数为KL散度，略去无关项后，化简为交叉熵的形式，用信息论的知识可以很好理解。因此”信息论“可以是我们的第三副眼镜，在很多其他机器学习算法中都会涉及”信息熵“的概念，比如决策树。</p>
+
+<p><a href="https://www.statisticshowto.datasciencecentral.com/general-linear-model-glm/">广义线性模型</a>能包含以上内容的基本精髓。</p>
+
+<p>有了”几何“视角，”概率“视角，“信息”视角，基本可以对一个完整的机器学习过程有足够多的数学直觉。这其实也是我们通常所说的机器学习的几大数学基础：线性代数，概率论，信息论，以及没有提到的“算法”组件里的最优化理论。这些都是数学基础，可不是理论基础，有的机器学算法有严密的数学理论推导，可是在如今火热发展的深度学习领域，他并没有坚实的理论基础。为什么深度模型能高效学习？为什么深度模型比浅层模型好？为什么什么样的深度学习泛化性也不错？都是要解决的问题。除了以上提到的视角，你如果能找到更好的视角去理解数据，理解模型，理解泛化性，理解模型的收敛性质，那也是极好的。</p>
+
+<h1 id="再谈损失函数">再谈损失函数</h1>
+
+<p>之前的策略里提到构建的损失函数的思路，不论是“几何视角下最小化距离度量，还是“概率视角”下的极大似然估计和最大后验估计都是针对当前训练集而言。目的是经验风险最小化，而我们的终极目的是期望风险最小化，经验风险是期望风险的统计值，当数据样本不断接近总样本数的时候，经验风险收敛于期望风险。因此可将收集到数据集样本看做总体数据集的一次采样，采样到的样本分布可能并不是均衡的，这个时候的处理思路有两种，一种思路是对收集到的数据集进行重采样，使得样本分布平衡；另外一种是对损失函数进行修改，对损失函数进行加权处理，以抑制样本分布失衡导致的损失偏好，<a href="https://arxiv.org/abs/1708.02002">focal loss</a>体现了这种思想。</p>
+
+<p>前面说的是损失函数确定了以后后，如何根据样本分布做调整适应。那损失函数确定的根据又是什么？损失函数由评价指标确定，比如同样是一个分类问题，有的任务关心准确率，有的关系召回率，有的两者需要平衡，根据你的任务确定。在回归任务中，通常是用不同的范数衡量损失，L1范数相较于L2范数对异常点没那么敏感。</p>
+
+<h1 id="后记杂谈">后记——杂谈</h1>
+
+<h2 id="系统工程">系统工程</h2>
+
+<p>作为一个系统工程，有不同的群体参与其中，各自的关注点不尽相同，掌握的技术栈也有差异，大数据工程师通过使用Hadoop等分布式存储工具和spark,flink这样的分布式计算引擎，进行批量计算和流式计算；算法工程师承担着模型的选择，训练，部署，压缩等工作，不同的应用场景和公司业务对每个阶段侧重点不一；也有算法框架工程师，专注机器学习的框架的移植、以及机器学习编译工程师，专注于编译器的研发，实现模型的跨平台，也许某个公司也会招机器学习全栈工程师；学术界的研究按时序有它的趋势，热点问题会有更多的文章出现，从前几年的模型结构，预训练模型，到模型可解释性，模型的加速与压缩；最近关于深度学习的理论研究开始加大戏份，包括数据表示、模型泛化、优化算法等方面的内容。</p>
+
+<h2 id="新纪元">新纪元</h2>
+
+<p>很多人说深度学习将开启一个时代，如果你潜入其中，悟得一点心法，肯定能理解当年Google办公室里边那群科技大佬在第一次面对深度学习这块玄铁的时候以近乎疯狂的分贝喊了一嗓子”oh，Holy ****“吧，不知时至今日，当初的宏大愿景完成了多少。</p>
+
+<h2 id="推荐阅读">推荐阅读</h2>
+
+<p><a href="https://mml-book.com">mathematics for machine learning</a></p>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://grayicon.github.io/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://grayicon.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" role="button">机器学习 </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://grayicon.github.io/blog/2019-09/%E6%8F%AD%E5%BC%80%E6%95%B0%E5%AD%A6%E7%9A%84%E9%9D%A2%E7%BA%B1/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>揭开数学的面纱</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+		
+		<div class="col-md-2 pl-0">
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%89%8d%e8%a8%80">
+												 前言
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#1%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e6%98%af%e4%bb%80%e4%b9%88">
+												 1.机器学习是什么？
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#2%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%88%86%e7%b1%bb">
+												 2.机器学习的分类
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8c%89%e5%ad%a6%e4%b9%a0%e8%8c%83%e5%bc%8f%e5%88%86">
+												 按学习范式分：
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8c%89%e5%bb%ba%e6%a8%a1%e6%96%b9%e5%bc%8f%e5%88%86">
+												 按建模方式分：
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#3%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e7%bb%9f">
+												 3.如何构建机器学习系统？
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#31%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e7%bb%9f%e7%bb%84%e4%bb%b6">
+												 3.1机器学习系统组件
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%95%b0%e6%8d%ae">
+												 数据
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%a8%a1%e5%9e%8b">
+												 模型
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%ad%96%e7%95%a5">
+												 策略
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%ae%97%e6%b3%95">
+												 算法
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#32-%e5%a6%82%e4%bd%95%e6%9e%84%e5%bb%ba%e6%9c%ba%e5%99%a8%e5%ad%a6%e4%b9%a0%e7%b3%bb%e7%bb%9f%e7%9b%b4%e8%a7%89%e7%bb%8f%e9%aa%8cor%e6%95%b0%e5%ad%a6%e5%9f%ba%e7%a1%80">
+												 3.2 如何构建机器学习系统——直觉，经验or数学基础
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%b8%a4%e5%89%af%e7%9c%bc%e9%95%9c%e5%87%a0%e4%bd%95%e5%92%8c%e6%a6%82%e7%8e%87%e8%ae%ba">
+												 两副眼镜——“几何”和“概率论”
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%a7%8b%e4%ba%8e%e7%ba%bf%e6%80%a7%e5%9b%9e%e5%bd%92">
+												 &#34;始于线性回归&#34;
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bb%8e%e7%ba%bf%e6%80%a7%e5%88%b0%e9%9d%9e%e7%ba%bf%e6%80%a7">
+												 从”线性“到”非线性“
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e4%bb%8e%e5%9b%9e%e5%bd%92%e5%88%b0%e5%88%86%e7%b1%bb">
+												 从”回归“到”分类“：
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%86%8d%e8%b0%88%e6%8d%9f%e5%a4%b1%e5%87%bd%e6%95%b0">
+												 再谈损失函数
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e5%90%8e%e8%ae%b0%e6%9d%82%e8%b0%88">
+												 后记——杂谈
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e7%b3%bb%e7%bb%9f%e5%b7%a5%e7%a8%8b">
+												 系统工程
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%96%b0%e7%ba%aa%e5%85%83">
+												 新纪元
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+										<li class="nav-item">
+						 					<a class="nav-link" href="#%e6%8e%a8%e8%8d%90%e9%98%85%e8%af%bb">
+												 推荐阅读
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+				</ul>
+			</div>
+			
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+      <a href="//github.com/grayicon " target="_blank" rel="noopener"><i class="fab fa-github mr-3" aria-hidden="true"></i></a>    
+    
+    
+      <a href="//linkedin.com/in/gray1993" target="_blank" rel="noopener"><i class="fab fa-linkedin-in mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+
+    
+        <a href="mailto:grayicon@163.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span>  2016 - 2020 &copy; | Powerd by <a href='https://gohugo.io' target="_blank">Hugo</a>  </span>
+  </div>
+  
+
+</footer>
+
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://grayicon.github.io/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://grayicon.github.io/js/main.js"></script>
+
+
+
+  
+  <script src="https://grayicon.github.io/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://grayicon.github.io/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://grayicon.github.io/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
